@@ -1,4 +1,4 @@
 module net.lliurex.ui
 
 Window 1.0 Window.qml
-
+Background 1.0 Background.qml
