@@ -1,0 +1,13 @@
+Source: qml-module-lliurex-ui
+Section: utils
+Priority: optional
+Maintainer: Enrique Medina Gremaldos <quiqueiii@gmail.com>
+Build-Depends: debhelper (>=9), cmake, extra-cmake-modules, qtbase5-dev, qtdeclarative5-dev, libkf5coreaddons-dev
+Standards-Version: 3.9.7
+Homepage: http://lliurex.net
+
+Package: qml-module-lliurex-ui
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: LliureX qml widgets
+ Some qml widgets with LliureX look and feel (fake windows, noise backgrounds,...)
