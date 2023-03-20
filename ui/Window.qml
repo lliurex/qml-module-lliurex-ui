@@ -21,7 +21,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.6 as QQC2
 import QtQuick.Layouts 1.15
 
-Item {
+FocusScope {
     
     id: root
     default property Item contentItem: null
@@ -54,7 +54,6 @@ Item {
             anchors.topMargin: 8
             anchors.centerIn: parent
             anchors.fill:parent
-            
             
             Text {
                 id: lblTitle
