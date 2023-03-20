@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (22.0.1.0) lliurex22; urgency=medium
+
+  * Window base object is now a FocusScope
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Mon, 20 Mar 2023 14:23:32 +0100
+
 qml-module-lliurex-ui (22.0.0.1) lliurex22; urgency=medium
 
   * Dummy upgrade
