@@ -25,9 +25,9 @@ Rectangle
 {
     color: "#2980b9"
     
-    UniformSurface
+    TiledSurface
     {
-        opacity: 0.025
+        opacity: 0.3
         
         anchors.fill: parent
         

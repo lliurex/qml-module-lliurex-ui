@@ -25,6 +25,7 @@
 #define QML_LLIUREX_NOISE_PLUGIN
 
 #include "noise.h"
+#include "texture.h"
 
 #include <QQmlExtensionPlugin>
 #include <QObject>
@@ -69,6 +70,26 @@ private:
     double m_width;
     double m_height;
     
+};
+
+class TiledSurface : public QQuickItem
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int size MEMBER m_size)
+
+public:
+    explicit TiledSurface(QQuickItem* parent = nullptr);
+
+protected:
+    virtual QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData) override;
+
+private:
+    QSGGeometryNode* m_Texture;
+    double m_width;
+    double m_height;
+    double m_size;
+
 };
 
 class NoisePlugin : public QQmlExtensionPlugin
