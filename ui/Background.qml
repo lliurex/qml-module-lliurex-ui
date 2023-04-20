@@ -27,7 +27,7 @@ Rectangle
     
     TiledSurface
     {
-        opacity: 0.3
+        opacity: 0.1
         
         anchors.fill: parent
         

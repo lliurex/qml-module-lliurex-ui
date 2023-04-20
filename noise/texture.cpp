@@ -29,7 +29,7 @@ static uint32_t lx_texture_get(int x,int y,int tile_size)
 
     uint8_t height = get_tile(tx,ty);
 
-    float base = 0.1 + (frand() * 0.025f) + (height*0.01);
+    float base = 0.4 + (frand() * 0.3f) + (height*0.1);
     int left = get_tile(tx-1,ty) - height;
     int right = get_tile(tx+1,ty) - height;
     int up = get_tile(tx,ty-1) - height;
