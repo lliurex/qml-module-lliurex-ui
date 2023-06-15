@@ -8,7 +8,7 @@ find_package(Qt5 REQUIRED COMPONENTS Qml Quick)
 
 #set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fexceptions")
 
-add_library(lliurexuinoiseplugin SHARED plugin.cpp noise.cpp)
+add_library(lliurexuinoiseplugin SHARED plugin.cpp noise.cpp texture.cpp)
 
 target_link_libraries (lliurexuinoiseplugin
     Qt5::Qml
