@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.0.0.0) focal; urgency=medium
+
+  * Using a new procedural texture as background
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 15 Jun 2023 09:12:42 +0200
+
 qml-module-lliurex-ui (22.0.1.0) lliurex22; urgency=medium
 
   * Window base object is now a FocusScope
