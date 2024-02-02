@@ -21,15 +21,47 @@ import net.lliurex.ui.noise 1.0
 
 import QtQuick 2.6
 
-Rectangle
+Canvas
 {
-    color: "#2980b9"
-    
-    TiledSurface
+    id: root
+    anchors.fill: parent
+    antialiasing:false; smooth:false
+
+    property var baseColor: "#2980b9"
+    property var tileWidth: 128
+    property var tileHeight: 64
+
+    Component.onCompleted:
     {
-        opacity: 0.1
-        
-        anchors.fill: parent
-        
+    }
+
+    function computeMap()
+    {
+        console.log("recomputing scene...")
+    }
+
+    onWidthChanged:
+    {
+        computeMap();
+    }
+
+    onHeightChanged:
+    {
+        computeMap();
+    }
+
+    onPaint: function()
+    {
+        var ctx = getContext("2d");
+        ctx.clearRect(0, 0, width, height);
+
+        var diagonal = Math.sqrt((width*width) + (height*height));
+        var tileDiagonal = Math.sqrt((tileWidth * tileWidth) + (tileHeight * tileHeight));
+
+        ctx.fillStyle = baseColor;
+        ctx.fillRect(0, 0, width, height);
     }
 }
+
+//color: "#2980b9"
+
