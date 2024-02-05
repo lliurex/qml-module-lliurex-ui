@@ -31,8 +31,23 @@ Canvas
     property var tileWidth: 128
     property var tileHeight: 64
 
+    property var map : []
+    property var mapWidth: 0
+
     Component.onCompleted:
     {
+        var diagonal = Math.sqrt((width*width) + (height*height));
+        var tileDiagonal = Math.sqrt((tileWidth * tileWidth) + (tileHeight * tileHeight));
+
+        mapWidth = Math.floor(diagonal/tileDiagonal);
+        map = Array(mapWidth * mapWidth);
+
+        for (var j=0;j<mapWidth;j++) {
+            for (var i=0;i<mapWidth;i++) {
+                var r = Math.floor(Math.random() * 4);
+                map[i+j*mapWidth] = r;
+            }
+        }
     }
 
     function computeMap()
@@ -55,11 +70,36 @@ Canvas
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height);
 
-        var diagonal = Math.sqrt((width*width) + (height*height));
-        var tileDiagonal = Math.sqrt((tileWidth * tileWidth) + (tileHeight * tileHeight));
+        var tw = tileWidth;
+        var th = tileHeight;
+        var nw = width / tileWidth;
+        var nh = height / tileHeight * 2;
 
-        ctx.fillStyle = baseColor;
-        ctx.fillRect(0, 0, width, height);
+        for (var j=-1;j<nh;j++) {
+            var offset = (Math.abs(j)%2) == 1 ? 0 : tw/2;
+            for (var i=-1;i<nw;i++) {
+
+                var r = 0.4;
+                var g = 0.1;
+                var b = Math.random();
+
+                ctx.fillStyle = Qt.rgba(r,g,b,1.0);
+
+                var x = offset + (i * tw);
+                var y = j * th / 2;
+
+                ctx.beginPath();
+                ctx.moveTo(x,y + (th/2));
+                ctx.lineTo(x + (tw/2),y+th);
+                ctx.lineTo(x + tw,y+(th/2));
+                ctx.lineTo(x + (tw/2),y);
+                ctx.lineTo(x,y+(th/2));
+                ctx.fill();
+            }
+        }
+
+        //ctx.fillStyle = baseColor;
+        //ctx.fillRect(0, 0, width, height);
     }
 }
 
