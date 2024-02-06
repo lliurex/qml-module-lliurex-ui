@@ -64,6 +64,7 @@ Canvas
         }
 
         map[Math.floor(mapWidth/2)] = 1;
+        map[(mapWidth*mapWidth)-1] = 1;
     }
 
     onWidthChanged:
@@ -86,12 +87,12 @@ Canvas
         var nw = width / tileWidth;
         var nh = height / tileHeight * 2;
 
-        for (var j=0;j<nh;j++) {
+        for (var j=0;j<nh+1;j++) {
             var offset = (Math.abs(j)%2) == 0 ? 0 : tw/2;
-            for (var i=0;i<nw;i++) {
+            for (var i=0;i<nw+1;i++) {
 
                 var mi = Math.floor(mapWidth/2) + i - Math.floor(j/2);
-                var mj = i + Math.floor(j/2);
+                var mj = i + Math.floor(j/2) + (Math.abs(j)%2);
                 console.log(i,",",j,"->",mi,",",mj);
 
                 var value = map[ mi + mj*mapWidth];
@@ -102,8 +103,8 @@ Canvas
 
                 ctx.fillStyle = Qt.rgba(r,g,b,1.0);
 
-                var x = offset + (i * tw) - (0);
-                var y = (j * th / 2) - (0);
+                var x = offset + (i * tw) - (tw/2);
+                var y = Math.floor(j * th / 2) - (th/2);
 
                 ctx.beginPath();
                 ctx.moveTo(x,y + (th/2));
