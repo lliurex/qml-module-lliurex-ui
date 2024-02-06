@@ -36,23 +36,34 @@ Canvas
 
     Component.onCompleted:
     {
-        var diagonal = Math.sqrt((width*width) + (height*height));
-        var tileDiagonal = Math.sqrt((tileWidth * tileWidth) + (tileHeight * tileHeight));
 
-        mapWidth = Math.floor(diagonal/tileDiagonal);
-        map = Array(mapWidth * mapWidth);
-
-        for (var j=0;j<mapWidth;j++) {
-            for (var i=0;i<mapWidth;i++) {
-                var r = Math.floor(Math.random() * 4);
-                map[i+j*mapWidth] = r;
-            }
-        }
     }
 
     function computeMap()
     {
         console.log("recomputing scene...")
+
+        var diagonal = Math.sqrt((width*width) + (height*height));
+
+        var b = tileWidth/2;
+        var c = tileHeight/2;
+
+        var tileDiagonal = Math.sqrt((b * b) + (c * c));
+
+        mapWidth = Math.ceil(diagonal/tileDiagonal);
+        map = Array(mapWidth * mapWidth);
+
+        console.log("Diagonal:",diagonal,",",tileDiagonal);
+        console.log("Dimensions:",mapWidth,"x",mapWidth);
+
+        for (var j=0;j<mapWidth;j++) {
+            for (var i=0;i<mapWidth;i++) {
+                var r =(j * 0.12);
+                map[i+j*mapWidth] = r;
+            }
+        }
+
+        map[Math.floor(mapWidth/2)] = 1;
     }
 
     onWidthChanged:
@@ -75,18 +86,24 @@ Canvas
         var nw = width / tileWidth;
         var nh = height / tileHeight * 2;
 
-        for (var j=-1;j<nh;j++) {
-            var offset = (Math.abs(j)%2) == 1 ? 0 : tw/2;
-            for (var i=-1;i<nw;i++) {
+        for (var j=0;j<nh;j++) {
+            var offset = (Math.abs(j)%2) == 0 ? 0 : tw/2;
+            for (var i=0;i<nw;i++) {
+
+                var mi = Math.floor(mapWidth/2) + i - Math.floor(j/2);
+                var mj = i + Math.floor(j/2);
+                console.log(i,",",j,"->",mi,",",mj);
+
+                var value = map[ mi + mj*mapWidth];
 
                 var r = 0.4;
                 var g = 0.1;
-                var b = Math.random();
+                var b = value;
 
                 ctx.fillStyle = Qt.rgba(r,g,b,1.0);
 
-                var x = offset + (i * tw);
-                var y = j * th / 2;
+                var x = offset + (i * tw) - (0);
+                var y = (j * th / 2) - (0);
 
                 ctx.beginPath();
                 ctx.moveTo(x,y + (th/2));
