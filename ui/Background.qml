@@ -41,7 +41,7 @@ Canvas
 
     function computeMap()
     {
-        console.log("recomputing scene...")
+        //console.log("recomputing scene...")
 
         var diagonal = Math.sqrt((width*width) + (height*height));
 
@@ -50,21 +50,19 @@ Canvas
 
         var tileDiagonal = Math.sqrt((b * b) + (c * c));
 
-        mapWidth = Math.ceil(diagonal/tileDiagonal);
+        mapWidth = Math.ceil(diagonal/tileDiagonal) + 4;
         map = Array(mapWidth * mapWidth);
 
-        console.log("Diagonal:",diagonal,",",tileDiagonal);
-        console.log("Dimensions:",mapWidth,"x",mapWidth);
+        //console.log("Diagonal:",diagonal,",",tileDiagonal);
+        //console.log("Dimensions:",mapWidth,"x",mapWidth);
 
         for (var j=0;j<mapWidth;j++) {
             for (var i=0;i<mapWidth;i++) {
-                var r =(j * 0.12);
+                var r = Math.floor(Math.random() * 4);
                 map[i+j*mapWidth] = r;
             }
         }
 
-        map[Math.floor(mapWidth/2)] = 1;
-        map[(mapWidth*mapWidth)-1] = 1;
     }
 
     onWidthChanged:
@@ -84,42 +82,72 @@ Canvas
 
         var tw = tileWidth;
         var th = tileHeight;
-        var nw = width / tileWidth;
-        var nh = height / tileHeight * 2;
+        var nw = Math.floor(width / tileWidth);
+        var nh = Math.floor(height / tileHeight * 2);
 
-        for (var j=0;j<nh+1;j++) {
+        var color = baseColor;
+
+        for (var j=-1;j<nh+1;j++) {
             var offset = (Math.abs(j)%2) == 0 ? 0 : tw/2;
-            for (var i=0;i<nw+1;i++) {
+            for (var i=-1;i<nw+1;i++) {
 
-                var mi = Math.floor(mapWidth/2) + i - Math.floor(j/2);
-                var mj = i + Math.floor(j/2) + (Math.abs(j)%2);
-                console.log(i,",",j,"->",mi,",",mj);
+                var mi =  Math.ceil(mapWidth/2) + i - Math.floor(j/2);
+                var mj = 1 + i + Math.floor(j/2) + (Math.abs(j)%2);
+                //console.log(i,",",j,"->",mi,",",mj);
 
-                var value = map[ mi + mj*mapWidth];
+                var blockHeight = map[ mi + mj*mapWidth] * 16;
 
-                var r = 0.4;
-                var g = 0.1;
-                var b = value;
+                var x = offset + (i * tw) ;
+                var y = Math.floor(j * th / 2) ;
 
-                ctx.fillStyle = Qt.rgba(r,g,b,1.0);
+                if (blockHeight < 1) {
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.moveTo(x,y + (th/2));
+                    ctx.lineTo(x + (tw/2),y+th);
+                    ctx.lineTo(x + tw,y+(th/2));
+                    ctx.lineTo(x + (tw/2),y);
+                    ctx.lineTo(x,y+(th/2));
+                    ctx.fill();
+                }
+                else {
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.moveTo(x,y + (th/2) - blockHeight);
+                    ctx.lineTo(x + (tw/2),y+th - blockHeight);
+                    ctx.lineTo(x + tw,y+(th/2) - blockHeight);
+                    ctx.lineTo(x + (tw/2),y - blockHeight);
+                    ctx.lineTo(x,y+(th/2) - blockHeight);
+                    ctx.fill();
 
-                var x = offset + (i * tw) - (tw/2);
-                var y = Math.floor(j * th / 2) - (th/2);
+                    ctx.fillStyle = Qt.darker(color,1.1);
+                    ctx.beginPath();
+                    ctx.moveTo(x,y + (th/2));
+                    ctx.lineTo(x + (tw/2),y+th);
+                    ctx.lineTo(x + (tw/2),y+th - blockHeight);
+                    ctx.lineTo(x,y+(th/2) - blockHeight);
+                    ctx.lineTo(x,y+(th/2));
+                    ctx.fill();
 
-                ctx.beginPath();
-                ctx.moveTo(x,y + (th/2));
-                ctx.lineTo(x + (tw/2),y+th);
-                ctx.lineTo(x + tw,y+(th/2));
-                ctx.lineTo(x + (tw/2),y);
-                ctx.lineTo(x,y+(th/2));
-                ctx.fill();
+                    ctx.fillStyle = Qt.darker(color,1.2);
+                    ctx.beginPath();
+                    ctx.moveTo(x+(tw/2),y + th);
+                    ctx.lineTo(x+tw, y+(th/2));
+                    ctx.lineTo(x+tw, y+(th/2) - blockHeight);
+                    ctx.lineTo(x+(tw/2),y + th - blockHeight);
+                    ctx.lineTo(x+(tw/2),y + th);
+                    ctx.fill();
+
+                }
             }
         }
 
-        //ctx.fillStyle = baseColor;
-        //ctx.fillRect(0, 0, width, height);
+    }
+
+    UniformSurface
+    {
+        opacity: 0.05
+
+        anchors.fill: parent
     }
 }
-
-//color: "#2980b9"
-
