@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.1.0.0) jammy; urgency=medium
+
+  * New 23.10 backgrounds. Expected some modifications soon, however.
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Fri, 09 Feb 2024 09:41:00 +0100
+
 qml-module-lliurex-ui (23.0.0.1) jammy; urgency=medium
 
   * Jammy release
