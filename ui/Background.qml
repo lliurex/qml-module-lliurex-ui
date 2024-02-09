@@ -27,6 +27,7 @@ Canvas
     anchors.fill: parent
     antialiasing:false; smooth:false
 
+    property var isWallpaper: false
     property var baseColor: "#2980b9"
     property var tileWidth: 128
     property var tileHeight: 64
@@ -85,11 +86,14 @@ Canvas
         var nw = Math.floor(width / tileWidth);
         var nh = Math.floor(height / tileHeight * 2);
 
-        var color = baseColor;
+
+        var lx = mapWidth/2;
+        var ly = mapWidth/2;
 
         for (var j=-1;j<nh+1;j++) {
             var offset = (Math.abs(j)%2) == 0 ? 0 : tw/2;
             for (var i=-1;i<nw+1;i++) {
+                var color = baseColor;
 
                 var mi =  Math.ceil(mapWidth/2) + i - Math.floor(j/2);
                 var mj = 1 + i + Math.floor(j/2) + (Math.abs(j)%2);
@@ -97,57 +101,101 @@ Canvas
 
                 var blockHeight = map[ mi + mj*mapWidth] * 16;
 
+                if (blockHeight<16) {
+                    color = Qt.darker(color,1.05);
+                }
+
                 var x = offset + (i * tw) ;
                 var y = Math.floor(j * th / 2) ;
 
-                if (blockHeight < 1) {
-                    ctx.fillStyle = color;
-                    ctx.beginPath();
-                    ctx.moveTo(x,y + (th/2));
-                    ctx.lineTo(x + (tw/2),y+th);
-                    ctx.lineTo(x + tw,y+(th/2));
-                    ctx.lineTo(x + (tw/2),y);
-                    ctx.lineTo(x,y+(th/2));
-                    ctx.fill();
+                //color = Qt.hsva(blockHeight/64,0.5,0.5,1.0);
+
+                if (isWallpaper) {
+                    var dx = lx-mi;
+                    var dy = ly-mj;
+
+                    var dist = 0.01 + Math.sqrt((dx*dx)+(dy*dy));
+                    var attenuation = 1/(dist*0.5);
+                    color = Qt.lighter(color, attenuation);
                 }
-                else {
-                    ctx.fillStyle = color;
+
+
+                var leftHeight = map[(mi-1) + mj*mapWidth] * 16;
+
+                var heightDiff = leftHeight - blockHeight;
+
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(x,y + (th/2) - blockHeight);
+                ctx.lineTo(x + (tw/2),y+th - blockHeight);
+                ctx.lineTo(x + tw,y+(th/2) - blockHeight);
+                ctx.lineTo(x + (tw/2),y - blockHeight);
+                ctx.lineTo(x,y+(th/2) - blockHeight);
+                ctx.fill();
+
+
+                /*
+                if(heightDiff > 0) {
+
+                    var sx = (tw/2) * 0.4;
+                    var sy = -(th/2) * 0.4;
+
+                    ctx.fillStyle = Qt.darker(color,1.05);
                     ctx.beginPath();
                     ctx.moveTo(x,y + (th/2) - blockHeight);
                     ctx.lineTo(x + (tw/2),y+th - blockHeight);
-                    ctx.lineTo(x + tw,y+(th/2) - blockHeight);
-                    ctx.lineTo(x + (tw/2),y - blockHeight);
-                    ctx.lineTo(x,y+(th/2) - blockHeight);
-                    ctx.fill();
+                    ctx.lineTo(sx+x + (tw/2),sy+y+th - blockHeight);
+                    ctx.lineTo(sx+x,sy+y + (th/2) - blockHeight);
 
-                    ctx.fillStyle = Qt.darker(color,1.1);
-                    ctx.beginPath();
-                    ctx.moveTo(x,y + (th/2));
-                    ctx.lineTo(x + (tw/2),y+th);
-                    ctx.lineTo(x + (tw/2),y+th - blockHeight);
-                    ctx.lineTo(x,y+(th/2) - blockHeight);
-                    ctx.lineTo(x,y+(th/2));
                     ctx.fill();
+                }
+                */
 
-                    ctx.fillStyle = Qt.darker(color,1.2);
-                    ctx.beginPath();
-                    ctx.moveTo(x+(tw/2),y + th);
-                    ctx.lineTo(x+tw, y+(th/2));
-                    ctx.lineTo(x+tw, y+(th/2) - blockHeight);
-                    ctx.lineTo(x+(tw/2),y + th - blockHeight);
-                    ctx.lineTo(x+(tw/2),y + th);
-                    ctx.fill();
+                ctx.fillStyle = Qt.darker(color,1.1);
+                ctx.beginPath();
+                ctx.moveTo(x,y + (th/2));
+                ctx.lineTo(x + (tw/2),y+th);
+                ctx.lineTo(x + (tw/2),y+th - blockHeight);
+                ctx.lineTo(x,y+(th/2) - blockHeight);
+                ctx.lineTo(x,y+(th/2));
+                ctx.fill();
 
+                ctx.fillStyle = Qt.darker(color,1.2);
+                ctx.beginPath();
+                ctx.moveTo(x+(tw/2),y + th);
+                ctx.lineTo(x+tw, y+(th/2));
+                ctx.lineTo(x+tw, y+(th/2) - blockHeight);
+                ctx.lineTo(x+(tw/2),y + th - blockHeight);
+                ctx.lineTo(x+(tw/2),y + th);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(x,y + (th/2) - blockHeight);
+                ctx.lineTo(x + (tw/2),y+th - blockHeight);
+                ctx.lineTo(x + tw,y+(th/2) - blockHeight);
+                ctx.lineTo(x + (tw/2),y - blockHeight);
+                ctx.lineTo(x,y+(th/2) - blockHeight);
+                ctx.strokeStyle = Qt.darker(color,1.5);
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+
+                if (isWallpaper) {
+                    if (mi == lx && mj==ly) {
+                        console.log("center");
+                        for (var n=0;n<32;n++) {
+                            var sx = x + (tw/2) + (Math.random() * 32) - (16);
+                            var sy = y + (th/2) - (Math.random() * 256) ;
+                            ctx.fillStyle = Qt.rgba(1,1,1,0.2);
+                            ctx.beginPath();
+                            ctx.arc(sx,sy,4,0,360,false);
+                            ctx.fill();
+
+                        }
+                    }
                 }
             }
         }
 
     }
 
-    UniformSurface
-    {
-        opacity: 0.05
-
-        anchors.fill: parent
-    }
 }
