@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.2.1.0) jammy; urgency=medium
+
+  * Moved media files to absolute path usr/share
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 13 Feb 2024 11:01:56 +0100
+
 qml-module-lliurex-ui (23.2.0.0) jammy; urgency=medium
 
   * Added a kids mode, with random placed mice
