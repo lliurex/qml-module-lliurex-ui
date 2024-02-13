@@ -12,3 +12,4 @@ include(KDECMakeSettings)
 add_subdirectory(noise)
 
 install (DIRECTORY ui DESTINATION ${KDE_INSTALL_QMLDIR}/net/lliurex)
+install (DIRECTORY media DESTINATION "share/qml-module-lliurex-ui/")
