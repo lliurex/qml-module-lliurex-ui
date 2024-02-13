@@ -28,16 +28,26 @@ Canvas
     antialiasing:false; smooth:false
 
     property var isWallpaper: false
+    property var rats: true
     property var baseColor: "#2980b9"
+    property var ambient: 0.1
     property var tileWidth: 128
     property var tileHeight: 64
 
     property var map : []
+    property var items: []
+    property var lights: []
     property var mapWidth: 0
 
     Component.onCompleted:
     {
-
+        loadImage("01.png");
+        loadImage("02.png");
+        loadImage("03.png");
+        loadImage("04.png");
+        loadImage("05.png");
+        loadImage("06.png");
+        loadImage("07.png");
     }
 
     function computeMap()
@@ -46,21 +56,106 @@ Canvas
 
         var diagonal = Math.sqrt((width*width) + (height*height));
 
-        var b = tileWidth/2;
-        var c = tileHeight/2;
+        var b = Math.floor(tileWidth/2);
+        var c = Math.floor(tileHeight/2);
 
         var tileDiagonal = Math.sqrt((b * b) + (c * c));
 
         mapWidth = Math.ceil(diagonal/tileDiagonal) + 4;
         map = Array(mapWidth * mapWidth);
+        items = Array(mapWidth * mapWidth);
 
-        //console.log("Diagonal:",diagonal,",",tileDiagonal);
-        //console.log("Dimensions:",mapWidth,"x",mapWidth);
+        for (var n=0;n<mapWidth*mapWidth;n++) {
+            items[n] = 0;
+        }
 
         for (var j=0;j<mapWidth;j++) {
             for (var i=0;i<mapWidth;i++) {
                 var r = Math.floor(Math.random() * 4);
                 map[i+j*mapWidth] = r;
+            }
+        }
+
+        var cx = Math.floor(mapWidth/2);
+        var cy = cx;
+
+        items[cx+cy*mapWidth] = 1;
+
+        if (mapWidth>4) {
+            var item = 7;
+
+            while (item > 1) {
+                var locations = [[0,-3],[0,3],[3,0],[-3,0],[-3,-3],[3,3],[-3,3],[3,-3]];
+                var i = Math.floor(Math.random()*(locations.length-1));
+
+                var rx =  cx + locations[i][0];
+                var ry =  cy + locations[i][1];
+
+                if (items[rx+ry*mapWidth]!=0) {
+                    continue;
+                }
+
+                if (Math.random() > 0.5) {
+                    items[rx+ry*mapWidth] = item;
+                }
+                else {
+                    items[rx+ry*mapWidth] = item - 1;
+                }
+
+                item = item - 2;
+            }
+        }
+        computeLight();
+
+    }
+
+    function getEnergy(x,y,lx,ly,energy)
+    {
+        var dx = x - lx;
+        var dy = y - ly;
+
+        var dist = Math.sqrt((dx*dx)+(dy*dy));
+        var v = (energy / (1 + (dist*dist)) );
+
+        if (v<0) {
+            v=0;
+        }
+        return v;
+    }
+
+    function computeLight()
+    {
+        lights = Array(mapWidth * mapWidth);
+
+        for (var n=0;n<mapWidth*mapWidth;n++) {
+            lights[n] = 0.0;
+        }
+
+        var spotLights = []
+
+        for (var j=0;j<mapWidth;j++) {
+            for (var i=0;i<mapWidth;i++) {
+                var item = items[i+j*mapWidth];
+
+                if (item == 1) {
+                    spotLights.push([i,j,1.2]);
+                }
+
+                if (rats && item > 1) {
+                    spotLights.push([i,j,0.8]);
+                }
+            }
+        }
+
+        for (var j=0;j<mapWidth;j++) {
+            for (var i=0;i<mapWidth;i++) {
+                var energy = ambient;
+
+                for (var n=0;n<spotLights.length;n++) {
+                    energy=energy + getEnergy(i,j,spotLights[n][0],spotLights[n][1],spotLights[n][2]);
+                }
+
+                lights[i+j*mapWidth] = energy;
             }
         }
 
@@ -87,19 +182,20 @@ Canvas
         var nh = Math.floor(height / tileHeight * 2);
 
 
-        var lx = mapWidth/2;
-        var ly = mapWidth/2;
+        var lx = Math.floor(mapWidth/2);
+        var ly = Math.floor(mapWidth/2);
 
         for (var j=-1;j<nh+1;j++) {
             var offset = (Math.abs(j)%2) == 0 ? 0 : tw/2;
             for (var i=-1;i<nw+1;i++) {
-                var color = baseColor;
+                var color = Qt.lighter(baseColor,1.0);
 
                 var mi =  Math.ceil(mapWidth/2) + i - Math.floor(j/2);
                 var mj = 1 + i + Math.floor(j/2) + (Math.abs(j)%2);
                 //console.log(i,",",j,"->",mi,",",mj);
 
                 var blockHeight = map[ mi + mj*mapWidth] * 16;
+                var item = items[mi + mj*mapWidth];
 
                 if (blockHeight<16) {
                     color = Qt.darker(color,1.05);
@@ -108,17 +204,10 @@ Canvas
                 var x = offset + (i * tw) ;
                 var y = Math.floor(j * th / 2) ;
 
-                //color = Qt.hsva(blockHeight/64,0.5,0.5,1.0);
-
                 if (isWallpaper) {
-                    var dx = lx-mi;
-                    var dy = ly-mj;
-
-                    var dist = 0.01 + Math.sqrt((dx*dx)+(dy*dy));
-                    var attenuation = 1/(dist*0.5);
-                    color = Qt.lighter(color, attenuation);
+                    var energy = lights[mi+mj*mapWidth];
+                    color = Qt.rgba(color.r * energy,color.g * energy, color.b*energy,1);
                 }
-
 
                 var leftHeight = map[(mi-1) + mj*mapWidth] * 16;
 
@@ -132,24 +221,6 @@ Canvas
                 ctx.lineTo(x + (tw/2),y - blockHeight);
                 ctx.lineTo(x,y+(th/2) - blockHeight);
                 ctx.fill();
-
-
-                /*
-                if(heightDiff > 0) {
-
-                    var sx = (tw/2) * 0.4;
-                    var sy = -(th/2) * 0.4;
-
-                    ctx.fillStyle = Qt.darker(color,1.05);
-                    ctx.beginPath();
-                    ctx.moveTo(x,y + (th/2) - blockHeight);
-                    ctx.lineTo(x + (tw/2),y+th - blockHeight);
-                    ctx.lineTo(sx+x + (tw/2),sy+y+th - blockHeight);
-                    ctx.lineTo(sx+x,sy+y + (th/2) - blockHeight);
-
-                    ctx.fill();
-                }
-                */
 
                 ctx.fillStyle = Qt.darker(color,1.1);
                 ctx.beginPath();
@@ -180,16 +251,33 @@ Canvas
                 ctx.stroke();
 
                 if (isWallpaper) {
-                    if (mi == lx && mj==ly) {
-                        console.log("center");
-                        for (var n=0;n<32;n++) {
-                            var sx = x + (tw/2) + (Math.random() * 32) - (16);
-                            var sy = y + (th/2) - (Math.random() * 256) ;
-                            ctx.fillStyle = Qt.rgba(1,1,1,0.2);
-                            ctx.beginPath();
-                            ctx.arc(sx,sy,4,0,360,false);
-                            ctx.fill();
+                    if (item == 1) {
+                        ctx.drawImage("01.png",x,y-192-blockHeight);
+                    }
 
+                    if (rats) {
+                        if (item == 2) {
+                            ctx.drawImage("02.png",x,y-192-(th/3)-blockHeight);
+                        }
+
+                        if (item == 3) {
+                            ctx.drawImage("03.png",x,y-192-(th/3)-blockHeight);
+                        }
+
+                        if (item == 4) {
+                            ctx.drawImage("04.png",x,y-192-(th/3)-blockHeight);
+                        }
+
+                        if (item == 5) {
+                            ctx.drawImage("05.png",x,y-192-(th/3)-blockHeight);
+                        }
+
+                        if (item == 6) {
+                            ctx.drawImage("06.png",x,y-192-(th/3)-blockHeight);
+                        }
+
+                        if (item == 7) {
+                            ctx.drawImage("07.png",x,y-192-(th/3)-blockHeight);
                         }
                     }
                 }
