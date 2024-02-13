@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.2.0.0) jammy; urgency=medium
+
+  * Added a kids mode, with random placed mice
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Tue, 13 Feb 2024 10:19:29 +0100
+
 qml-module-lliurex-ui (23.1.0.0) jammy; urgency=medium
 
   * New 23.10 backgrounds. Expected some modifications soon, however.
