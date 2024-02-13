@@ -39,15 +39,25 @@ Canvas
     property var lights: []
     property var mapWidth: 0
 
+    property var images : {
+        1 : "/usr/share/qml-module-lliurex-ui/media/01.png",
+        2 : "/usr/share/qml-module-lliurex-ui/media/02.png",
+        3 : "/usr/share/qml-module-lliurex-ui/media/03.png",
+        4 : "/usr/share/qml-module-lliurex-ui/media/04.png",
+        5 : "/usr/share/qml-module-lliurex-ui/media/05.png",
+        6 : "/usr/share/qml-module-lliurex-ui/media/06.png",
+        7 : "/usr/share/qml-module-lliurex-ui/media/07.png"
+    }
+
     Component.onCompleted:
     {
-        loadImage("01.png");
-        loadImage("02.png");
-        loadImage("03.png");
-        loadImage("04.png");
-        loadImage("05.png");
-        loadImage("06.png");
-        loadImage("07.png");
+        loadImage(images[1]);
+        loadImage(images[2]);
+        loadImage(images[3]);
+        loadImage(images[4]);
+        loadImage(images[5]);
+        loadImage(images[6]);
+        loadImage(images[7]);
     }
 
     function computeMap()
@@ -252,32 +262,32 @@ Canvas
 
                 if (isWallpaper) {
                     if (item == 1) {
-                        ctx.drawImage("01.png",x,y-192-blockHeight);
+                        ctx.drawImage(images[1],x,y-192-blockHeight);
                     }
 
                     if (rats) {
                         if (item == 2) {
-                            ctx.drawImage("02.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[2],x,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 3) {
-                            ctx.drawImage("03.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[3],x,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 4) {
-                            ctx.drawImage("04.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[4],x,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 5) {
-                            ctx.drawImage("05.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[5],x,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 6) {
-                            ctx.drawImage("06.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[6],x,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 7) {
-                            ctx.drawImage("07.png",x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[7],x,y-192-(th/3)-blockHeight);
                         }
                     }
                 }
