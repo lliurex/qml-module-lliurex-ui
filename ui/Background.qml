@@ -267,27 +267,27 @@ Canvas
 
                     if (rats) {
                         if (item == 2) {
-                            ctx.drawImage(images[2],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[2],x+16,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 3) {
-                            ctx.drawImage(images[3],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[3],x,y-180-(th/3)-blockHeight);
                         }
 
                         if (item == 4) {
-                            ctx.drawImage(images[4],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[4],x+12,y-192-(th/3)-blockHeight);
                         }
 
                         if (item == 5) {
-                            ctx.drawImage(images[5],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[5],x-4,y-185-(th/3)-blockHeight);
                         }
 
                         if (item == 6) {
-                            ctx.drawImage(images[6],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[6],x+16,y-185-(th/3)-blockHeight);
                         }
 
                         if (item == 7) {
-                            ctx.drawImage(images[7],x,y-192-(th/3)-blockHeight);
+                            ctx.drawImage(images[7],x+20,y-192-(th/3)-blockHeight);
                         }
                     }
                 }
