@@ -1,3 +1,10 @@
+qml-module-lliurex-ui (23.2.2.0) jammy; urgency=medium
+
+  * Updated valenting image
+  * Fixed character alignment to better fit tiles
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Wed, 14 Feb 2024 10:12:03 +0100
+
 qml-module-lliurex-ui (23.2.1.0) jammy; urgency=medium
 
   * Moved media files to absolute path usr/share
