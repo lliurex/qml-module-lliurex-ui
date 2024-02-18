@@ -92,6 +92,26 @@ private:
 
 };
 
+class Perlin : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int seed MEMBER m_seed)
+    Q_PROPERTY(float frequency MEMBER m_frequency)
+    Q_PROPERTY(int depth MEMBER m_depth)
+
+public:
+    Perlin();
+
+    Q_INVOKABLE float get(float x,float y);
+
+private:
+    int m_seed;
+    float m_frequency;
+    int m_depth;
+
+};
+
 class NoisePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
