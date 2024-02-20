@@ -123,7 +123,7 @@ Canvas
                 item = item - 2;
             }
         }
-        computeLight();
+        //computeLight();
 
     }
 
@@ -191,6 +191,8 @@ Canvas
 
     onPaint: function()
     {
+        computeLight();
+
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height);
 
