@@ -103,7 +103,7 @@ static float perlin_2d(float x, float y, float freq, int depth)
     return fin/div;
 }
 
-float get_perlin(float x, float y, float freq, int depth,int seed)
+float noise::get_perlin(float x, float y, float freq, int depth,int seed)
 {
     SEED = seed;
 

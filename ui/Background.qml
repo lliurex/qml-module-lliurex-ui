@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import net.lliurex.ui.noise 1.0
+import net.lliurex.ui.noise 1.0 as Noise
 
 import QtQuick 2.6
 
@@ -30,6 +30,7 @@ Canvas
     property var isWallpaper: false
     property var rats: true
     property var baseColor: "#2980b9"
+    property var seed : 0
     property var ambient: 0.1
     property var tileWidth: 128
     property var tileHeight: 64
@@ -47,6 +48,12 @@ Canvas
         5 : "/usr/share/qml-module-lliurex-ui/media/05.png",
         6 : "/usr/share/qml-module-lliurex-ui/media/06.png",
         7 : "/usr/share/qml-module-lliurex-ui/media/07.png"
+    }
+
+    Noise.Perlin
+    {
+        id: perlin
+        seed : root.seed
     }
 
     Component.onCompleted:
@@ -81,7 +88,8 @@ Canvas
 
         for (var j=0;j<mapWidth;j++) {
             for (var i=0;i<mapWidth;i++) {
-                var r = Math.floor(Math.random() * 4);
+                //var r = Math.floor(Math.random() * 4);
+                var r = Math.floor(perlin.get(i,j) * 4);
                 map[i+j*mapWidth] = r;
             }
         }
