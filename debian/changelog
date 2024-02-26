@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.3.0.0) jammy; urgency=medium
+
+  * Using a perlin based noise with a custom seed, in order to achieve some determinism
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 26 Feb 2024 19:13:53 +0100
+
 qml-module-lliurex-ui (23.2.2.0) jammy; urgency=medium
 
   * Updated valenting image
