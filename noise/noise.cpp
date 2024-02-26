@@ -103,6 +103,13 @@ static float perlin_2d(float x, float y, float freq, int depth)
     return fin/div;
 }
 
+float noise::get_perlin(float x, float y, float freq, int depth,int seed)
+{
+    SEED = seed;
+
+    return perlin_2d(x, y, freq, depth);
+}
+
 QImage* noise::perlin(int width,int height,float freq,int depth,int seed)
 {
     //ugly

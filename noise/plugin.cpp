@@ -181,12 +181,25 @@ QSGNode* TiledSurface::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* up
     return node;
 }
 
+Perlin::Perlin()
+{
+    m_seed = 0;
+    m_frequency = 1.0f;
+    m_depth = 1;
+}
+
+float Perlin::get(float x, float y)
+{
+    return noise::get_perlin(x, y, m_frequency, m_depth, m_seed);
+}
+
 NoisePlugin::NoisePlugin(QObject* parent) : QQmlExtensionPlugin(parent)
 {
 }
 
 void NoisePlugin::registerTypes(const char* uri)
 {
+    qmlRegisterType<Perlin> (uri, 1, 0, "Perlin");
     qmlRegisterType<NoiseSurface> (uri, 1, 0, "NoiseSurface");
     qmlRegisterType<UniformSurface> (uri, 1, 0, "UniformSurface");
     qmlRegisterType<TiledSurface> (uri, 1, 0, "TiledSurface");
