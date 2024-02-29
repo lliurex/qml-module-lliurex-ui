@@ -1,7 +1,7 @@
 /*
     Lliurex UI toolkit
 
-    Copyright (C) 2022  Enrique Medina Gremaldos <quiqueiii@gmail.com>
+    Copyright (C) 2024  Enrique Medina Gremaldos <quique@necos.es>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,7 +47,9 @@ Canvas
         4 : "/usr/share/qml-module-lliurex-ui/media/04.png",
         5 : "/usr/share/qml-module-lliurex-ui/media/05.png",
         6 : "/usr/share/qml-module-lliurex-ui/media/06.png",
-        7 : "/usr/share/qml-module-lliurex-ui/media/07.png"
+        7 : "/usr/share/qml-module-lliurex-ui/media/07.png",
+        8 : "/usr/share/qml-module-lliurex-ui/media/08.png",
+        9 : "/usr/share/qml-module-lliurex-ui/media/09.png"
     }
 
     Noise.Perlin
@@ -58,13 +60,9 @@ Canvas
 
     Component.onCompleted:
     {
-        loadImage(images[1]);
-        loadImage(images[2]);
-        loadImage(images[3]);
-        loadImage(images[4]);
-        loadImage(images[5]);
-        loadImage(images[6]);
-        loadImage(images[7]);
+        for (var n=1;n<10;n++) {
+            loadImage(images[n]);
+        }
     }
 
     function computeMap()
@@ -94,36 +92,53 @@ Canvas
             }
         }
 
-        var cx = Math.floor(mapWidth/2);
-        var cy = cx;
+        if (rats) {
+            var cx = Math.floor(mapWidth/2);
+            var cy = cx;
 
-        items[cx+cy*mapWidth] = 1;
+            items[cx+cy*mapWidth] = 1;
 
-        if (mapWidth>4) {
-            var item = 7;
+            if (mapWidth>4) {
+                var item = 7;
 
-            while (item > 1) {
-                var locations = [[0,-3],[0,3],[3,0],[-3,0],[-3,-3],[3,3],[-3,3],[3,-3]];
-                var i = Math.floor(Math.random()*(locations.length-1));
+                while (item > 1) {
+                    var locations = [[0,-3],[0,3],[3,0],[-3,0],[-3,-3],[3,3],[-3,3],[3,-3]];
+                    var i = Math.floor(Math.random()*(locations.length-1));
 
-                var rx =  cx + locations[i][0];
-                var ry =  cy + locations[i][1];
+                    var rx =  cx + locations[i][0];
+                    var ry =  cy + locations[i][1];
 
-                if (items[rx+ry*mapWidth]!=0) {
-                    continue;
+                    if (items[rx+ry*mapWidth]!=0) {
+                        continue;
+                    }
+
+                    if (Math.random() > 0.5) {
+                        items[rx+ry*mapWidth] = item;
+                    }
+                    else {
+                        items[rx+ry*mapWidth] = item - 1;
+                    }
+
+                    item = item - 2;
                 }
-
-                if (Math.random() > 0.5) {
-                    items[rx+ry*mapWidth] = item;
-                }
-                else {
-                    items[rx+ry*mapWidth] = item - 1;
-                }
-
-                item = item - 2;
             }
         }
-        //computeLight();
+        else {
+            for (var j=0;j<mapWidth;j++) {
+                for (var i=0;i<mapWidth;i++) {
+                    var r = perlin.get(i,j);
+
+                    if (r > 0.985) {
+                        if (Math.random() > 0.5) {
+                            items[i+j*mapWidth] = 8;
+                        }
+                        else {
+                            items[i+j*mapWidth] = 9;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
@@ -159,7 +174,7 @@ Canvas
                     spotLights.push([i,j,1.2]);
                 }
 
-                if (rats && item > 1) {
+                if (item > 1) {
                     spotLights.push([i,j,0.8]);
                 }
             }
@@ -298,6 +313,16 @@ Canvas
 
                         if (item == 7) {
                             ctx.drawImage(images[7],x+20,y-192-(th/3)-blockHeight);
+                        }
+
+                    }
+                    else {
+                        if (item == 8) {
+                            ctx.drawImage(images[8],x+55,y+20-(th/3)-blockHeight);
+                        }
+
+                        if (item == 9) {
+                            ctx.drawImage(images[9],x+55,y+0-(th/3)-blockHeight);
                         }
                     }
                 }
