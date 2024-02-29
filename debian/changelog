@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (23.4.0.0) jammy; urgency=medium
+
+  * Using some fireflies for adult mode
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Thu, 29 Feb 2024 10:18:15 +0100
+
 qml-module-lliurex-ui (23.3.0.0) jammy; urgency=medium
 
   * Using a perlin based noise with a custom seed, in order to achieve some determinism
