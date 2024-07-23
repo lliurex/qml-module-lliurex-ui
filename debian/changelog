@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (25.0.0.2) noble; urgency=medium
+
+  * Updated cmake to match qt6
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 23 Jul 2024 09:43:32 +0200
+
 qml-module-lliurex-ui (25.0.0.1) noble; urgency=medium
 
   * Blind build to noble. Not even tested
