@@ -1,13 +1,13 @@
 /*
- * Copyright (C) 2020 Lliurex project
+ * Copyright (C) 2024 Lliurex project
  *
  * Author:
- *  Enrique Medina Gremaldos <quiqueiii@gmail.com>
+ *  Enrique Medina Gremaldos <quique@necos.es>
  *
  * Source:
- *  https://github.com/edupals/qml-module-edupals-n4d
+ *  https://github.com/lliurex/qml-module-lliurex-ui
  *
- * This file is a part of qml-module-edupals-n4d.
+ * This file is a part of qml-module-lliurex.ui.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
