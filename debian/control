@@ -9,6 +9,13 @@ Homepage: http://lliurex.net
 
 Package: qml-module-lliurex-ui
 Architecture: any
+Depends: qml-module-lliurex-ui
+Description: Dummy transitional package
+
+Package: qml6-module-lliurex-ui
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Provides: qml-module-lliurex-ui
+Replaces: qml-module-lliurex-ui
 Description: LliureX qml widgets
  Some qml widgets with LliureX look and feel (fake windows, noise backgrounds,...)
