@@ -17,6 +17,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import "3dstuff.js" as S3d
+import "scenes.js" as Scenes
+
 import net.lliurex.ui.noise 1.0 as Noise
 
 import QtQuick 2.6
