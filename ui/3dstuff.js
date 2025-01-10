@@ -23,8 +23,6 @@ const COLOR_BACKGROUND = [0x34,0x49,0x5e,0xff];
 const COLOR_BASE = [0x28,0x80,0xb9,0xff];
 
 
-
-
 function color4_from_bytes(r,g,b,a)
 {
     var c = [0,0,0,0];
@@ -199,4 +197,128 @@ function vec4_sub(a,b)
     var v = [a[0]-b[0],a[1]-b[1],a[2]-b[2],a[3]-b[3]];
 
     return v;
+}
+
+function create_box(w,steps)
+{
+    var vertices = [];
+    var ws = (w*2)/steps;
+
+    //XZ
+    for (var i=0;i<steps;i++) {
+        for (var j=0;j<steps;j++) {
+            var x = -w + (i*ws);
+            var x2 = x + ws;
+            var y = -w + (j*ws);
+            var y2 = y + ws;
+
+            vertices.push([x,-w,y,1]);
+            vertices.push([x,-w,y2,1]);
+            vertices.push([x2,-w,y2,1]);
+
+            vertices.push([x,-w,y,1]);
+            vertices.push([x2,-w,y2,1]);
+            vertices.push([x2,-w,y,1]);
+
+            vertices.push([x,w,y,1]);
+            vertices.push([x,w,y2,1]);
+            vertices.push([x2,w,y2,1]);
+
+            vertices.push([x,w,y,1]);
+            vertices.push([x2,w,y2,1]);
+            vertices.push([x2,w,y,1]);
+
+        }
+    }
+
+    //XY
+    for (var i=0;i<steps;i++) {
+        for (var j=0;j<steps;j++) {
+            var x = -w + (i*ws);
+            var x2 = x + ws;
+            var y = -w + (j*ws);
+            var y2 = y + ws;
+
+            vertices.push([x,y,w,1]);
+            vertices.push([x2,y,w,1]);
+            vertices.push([x,y2,w,1]);
+
+            vertices.push([x2,y,w,1]);
+            vertices.push([x2,y2,w,1]);
+            vertices.push([x,y2,w,1]);
+
+            vertices.push([x,y,-w,1]);
+            vertices.push([x,y2,-w,1]);
+            vertices.push([x2,y2,-w,1]);
+
+            vertices.push([x,y,-w,1]);
+            vertices.push([x2,y2,-w,1]);
+            vertices.push([x2,y,-w,1]);
+
+        }
+    }
+
+    //YZ
+    for (var i=0;i<steps;i++) {
+        for (var j=0;j<steps;j++) {
+            var x = -w + (i*ws);
+            var x2 = x + ws;
+            var y = -w + (j*ws);
+            var y2 = y + ws;
+
+            vertices.push([-w,x,y,1]);
+            vertices.push([-w,x2,y,1]);
+            vertices.push([-w,x,y2,1]);
+
+            vertices.push([-w,x,y2,1]);
+            vertices.push([-w,x2,y,1]);
+            vertices.push([-w,x2,y2,1]);
+
+            vertices.push([w,x2,y2,1]);
+            vertices.push([w,x,y2,1]);
+            vertices.push([w,x,y,1]);
+
+            vertices.push([w,x2,y2,1]);
+            vertices.push([w,x,y,1]);
+            vertices.push([w,x2,y,1]);
+
+        }
+    }
+
+    return vertices;
+}
+
+function box(scene)
+{
+    var minv = [0,0,0];
+    var maxv = [0,0,0];
+
+    for (var v=0;v<3;v++) {
+        minv[v] = scene[0][0][v];
+        maxv[v] = scene[0][0][v];
+    }
+
+    for (var n=0;n<scene.length;n++) {
+        var vertex = scene[n][0];
+
+        for (var v=0;v<3;v++) {
+            if (vertex[v] < minv[v]) {
+                minv[v] = vertex[v];
+            }
+
+            if (vertex[v] > maxv[v]) {
+                maxv[v] = vertex[v];
+            }
+        }
+    }
+
+    return [minv,maxv];
+}
+
+function center(bbox)
+{
+    var x = (bbox[0][0] + bbox[1][0]) / 2.0;
+    var y = (bbox[0][1] + bbox[1][1]) / 2.0;
+    var z = (bbox[0][2] + bbox[1][2]) / 2.0;
+    return [x,y,z];
 }

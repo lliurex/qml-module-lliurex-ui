@@ -43,6 +43,20 @@ Canvas
     property var lights: []
     property var mapWidth: 0
 
+    // 3d wallpaper properties
+    property var bbox: []
+    property var cbox: []
+
+    property var draw: null
+    property var angle: 0
+
+    property var zoom: 16
+    property var ratio: 1
+
+    property var fireflies: []
+    property var characters: []
+
+
     property var images : {
         1 : "/usr/share/qml-module-lliurex-ui/media/01.png",
         2 : "/usr/share/qml-module-lliurex-ui/media/02.png",
