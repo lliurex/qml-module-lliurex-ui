@@ -22,6 +22,27 @@ const KEYCODE_MICE = "#d95763";
 const COLOR_BACKGROUND = [0x34,0x49,0x5e,0xff];
 const COLOR_BASE = [0x28,0x80,0xb9,0xff];
 
+function color4_create(c)
+{
+    return [c[0]/255,c[1]/255,c[2]/255,c[3]/255];
+}
+
+function color4_create_hex(c)
+{
+    var h = "#";
+
+    h+=c[3].toString(16);
+    h+=c[0].toString(16);
+    h+=c[1].toString(16);
+    h+=c[2].toString(16);
+
+    return h;
+}
+
+function color4_copy(c)
+{
+    return [c[0],c[1],c[2],c[3]];
+}
 
 function color4_from_bytes(r,g,b,a)
 {

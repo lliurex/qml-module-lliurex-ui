@@ -285,7 +285,8 @@ Canvas
         var cx = width/2;
         var cy = height/2;
         var grd = ctx.createRadialGradient(cx,cy, r0, cx,cy, r1);
-        grd.addColorStop(0, "#ff34495e");
+        //grd.addColorStop(0, "#ff34495e");
+        grd.addColorStop(0, S3d.color4_create_hex(S3d.COLOR_BASE));
         grd.addColorStop(1, "#ff000000");
         ctx.fillStyle = grd;
         ctx.fillRect(0,0,width,height);
@@ -430,8 +431,7 @@ Canvas
 
                     var normal = S3d.vec4_cross(vab,vac);
 
-                    //var base = S3d.color4_from_bytes(0x34,0x98,0xdb,0xff);
-                    var base = S3d.color4_from_bytes(0x28,0x80,0xb9,0xff);
+                    var base = S3d.color4_create(S3d.COLOR_BASE);
 
                     var ambient = [0.2,0.2,0.2,1];
                     var ocolor = [0,0,0,1];
@@ -478,13 +478,7 @@ Canvas
 
                     cosAlpha = S3d.vec4_dot(normal,light);
 
-                    var cr = 0.16 * cosAlpha;
-                    var cg = 0.5 * cosAlpha;
-                    var cb = 0.72 * cosAlpha;
-
-                    //var fade = scene[s][0][1]/(bbox[1][1]-1);
                     var fade = (scene[s][0][1]+(cube[n][1]/2))/(bbox[1][1]-1);
-                    //var fade = 1;
 
                     ocolor = S3d.color4_blend(ocolor,background,1-fade);
                     ocolor = Qt.rgba(ocolor[0],ocolor[1],ocolor[2],1);
