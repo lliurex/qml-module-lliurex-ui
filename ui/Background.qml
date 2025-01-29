@@ -30,18 +30,11 @@ Canvas
     anchors.fill: parent
     antialiasing:false; smooth:false
 
-    property var isWallpaper: false
+    property var isWallpaper: true
     property var rats: true
     property var baseColor: "#2980b9"
     property var seed : 0
-    property var ambient: 0.1
-    property var tileWidth: 128
-    property var tileHeight: 64
-
-    property var map : []
-    property var items: []
-    property var lights: []
-    property var mapWidth: 0
+    property var ambient: isWallpaper ? 0.2 : 1.0
 
     // 3d wallpaper properties
     property var bbox: []
@@ -70,12 +63,6 @@ Canvas
         7 : "/usr/share/qml-module-lliurex-ui/media/07.png",
         8 : "/usr/share/qml-module-lliurex-ui/media/08.png",
         9 : "/usr/share/qml-module-lliurex-ui/media/09.png"
-    }
-
-    Noise.Perlin
-    {
-        id: perlin
-        seed : root.seed
     }
 
     /* Drawing functions */
@@ -294,87 +281,40 @@ Canvas
         //ctx.fillRect(0,0,width,height);
 
         //draw background lines
-        /*
-        var center_x = width/2;
-        var center_y = height/2;
-        var diagonal = Math.sqrt((center_x * center_x) + (center_y * center_y));
-
-        ctx.strokeStyle = "#ff304050";
-
-        var lines = 32;
-        var line_rad = 2*Math.PI/lines;
-        for (var l=0;l<lines;l++) {
-            ctx.beginPath();
-            ctx.moveTo(center_x,center_y);
-            var lx = Math.cos(line_rad * l) * diagonal;
-            var ly = Math.sin(line_rad * l) * diagonal;
-            ctx.lineTo(center_x + lx, center_y + ly);
-            ctx.stroke();
-        }
-
-        var circle_step = diagonal/lines;
-        for (var l=1;l<lines;l++) {
-            ctx.beginPath();
-            var radius = l*circle_step;
-            ctx.arc(center_x,center_y,radius,0,2*Math.PI);
-            ctx.stroke();
-        }
-        */
-
-        //angle = angle + Math.PI/2.0;
         var cube = S3d.create_box(1,2);
         var mrot = S3d.mat4_create_rot_y(Math.PI/4 + angle);
         var mrot2 = S3d.mat4_create_rot_x(-0.7);
 
         var lights = [];
-        /*
-        for (var s=0;s<scene.length;s++) {
 
-            var tx = (scene[s][0][0] - cbox[0]) * 2;
-            var ty = (scene[s][0][1] - bbox[1][1]) * 2;
-            var tz = (scene[s][0][2] - cbox[2]) * 2;
+        if (isWallpaper) {
+            for (var f=0;f<fireflies.length;f++) {
+                var mv = S3d.mat4_create_translate(fireflies[f][0],fireflies[f][1],fireflies[f][2]);
 
+                mv = S3d.mat4_mult(mv,mrot);
+                mv = S3d.mat4_mult(mv,mrot2);
 
-            var color = scene[s][1];
+                var pos = S3d.vec4_mult([0.5,0,0.5,1],mv);
+                lights.push([pos,[1,1,1,1],40]);
 
-            var mv = S3d.mat4_create_translate(tx,ty,tz);
-
-            mv = S3d.mat4_mult(mv,mrot);
-            mv = S3d.mat4_mult(mv,mrot2);
-
-            if (color === "#ac3232") {
-                var pos = S3d.vec4_mult([0,1,0,1],mv);
-                lights.push([pos,[1,1,1,1],10]);
+                draw_sprite(images[9],pos,0.5,0.5);
             }
-        }
-        */
 
-        for (var f=0;f<fireflies.length;f++) {
-            var mv = S3d.mat4_create_translate(fireflies[f][0],fireflies[f][1],fireflies[f][2]);
+            for (var c=0;c<characters.length;c++) {
+                var img = characters[c][0];
+                var tx = characters[c][1][0];
+                var ty = characters[c][1][1];
+                var tz = characters[c][1][2];
 
-            mv = S3d.mat4_mult(mv,mrot);
-            mv = S3d.mat4_mult(mv,mrot2);
+                var mv = S3d.mat4_create_translate(tx,ty,tz);
 
-            var pos = S3d.vec4_mult([0.5,0,0.5,1],mv);
-            lights.push([pos,[1,1,1,1],40]);
+                mv = S3d.mat4_mult(mv,mrot);
+                mv = S3d.mat4_mult(mv,mrot2);
 
-            draw_sprite(images[9],pos,0.5,0.5);
-        }
+                var pos = S3d.vec4_mult([0.5,0.1,-2.5,1],mv);
 
-        for (var c=0;c<characters.length;c++) {
-            var img = characters[c][0];
-            var tx = characters[c][1][0];
-            var ty = characters[c][1][1];
-            var tz = characters[c][1][2];
-
-            var mv = S3d.mat4_create_translate(tx,ty,tz);
-
-            mv = S3d.mat4_mult(mv,mrot);
-            mv = S3d.mat4_mult(mv,mrot2);
-
-            var pos = S3d.vec4_mult([0.5,0.1,-2.5,1],mv);
-
-            draw_sprite(img,pos,1.5,3);
+                draw_sprite(img,pos,1.5,3);
+            }
         }
 
         for (var l=0;l<outline.length;l++) {
@@ -433,12 +373,11 @@ Canvas
 
                     var base = S3d.color4_create(S3d.COLOR_BASE);
 
-                    var ambient = [0.2,0.2,0.2,1];
                     var ocolor = [0,0,0,1];
 
-                    ocolor[0] = base[0] * ambient[0];
-                    ocolor[1] = base[1] * ambient[1];
-                    ocolor[2] = base[2] * ambient[2];
+                    ocolor[0] = base[0] * root.ambient;
+                    ocolor[1] = base[1] * root.ambient;
+                    ocolor[2] = base[2] * root.ambient;
 
                     for (var l=0;l<lights.length;l++) {
                         var lpos = lights[l][0];
