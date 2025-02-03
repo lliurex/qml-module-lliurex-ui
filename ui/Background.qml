@@ -30,11 +30,11 @@ Canvas
     anchors.fill: parent
     antialiasing:false; smooth:false
 
-    property var isWallpaper: true
+    property var isWallpaper: false
     property var rats: true
     property var baseColor: "#2980b9"
     property var seed : 0
-    property var ambient: isWallpaper ? 0.2 : 1.0
+    property var ambient: (isWallpaper) ? 0.2 : 0.4
 
     // 3d wallpaper properties
     property var bbox: []
@@ -267,20 +267,22 @@ Canvas
         var background = S3d.color4_from_bytes(0x34,0x49,0x5e,0xff);
         //ctx.fillStyle = "#ff34495e";
 
-        var r0 = width * 0.2;
-        var r1 = width * 0.8;
-        var cx = width/2;
-        var cy = height/2;
-        var grd = ctx.createRadialGradient(cx,cy, r0, cx,cy, r1);
-        //grd.addColorStop(0, "#ff34495e");
-        grd.addColorStop(0, S3d.color4_create_hex(S3d.COLOR_BASE));
-        grd.addColorStop(1, "#ff000000");
-        ctx.fillStyle = grd;
-        ctx.fillRect(0,0,width,height);
-        //ctx.fillStyle = "#ff2880b9"
-        //ctx.fillRect(0,0,width,height);
+        if (isWallpaper) {
+            var r0 = width * 0.2;
+            var r1 = width * 0.8;
+            var cx = width/2;
+            var cy = height/2;
+            var grd = ctx.createRadialGradient(cx,cy, r0, cx,cy, r1);
+            grd.addColorStop(0, S3d.color4_create_hex(S3d.COLOR_BASE));
+            grd.addColorStop(1, "#ff000000");
+            ctx.fillStyle = grd;
+            ctx.fillRect(0,0,width,height);
+        }
+        else {
+            ctx.fillStyle = S3d.color4_create_hex(S3d.COLOR_BASE);
+            ctx.fillRect(0,0,width,height);
+        }
 
-        //draw background lines
         var cube = S3d.create_box(1,2);
         var mrot = S3d.mat4_create_rot_y(Math.PI/4 + angle);
         var mrot2 = S3d.mat4_create_rot_x(-0.7);
@@ -315,6 +317,14 @@ Canvas
 
                 draw_sprite(img,pos,1.5,3);
             }
+        }
+        else {
+            var mv = S3d.mat4_create_translate(cbox[0],8,cbox[2])
+            mv = S3d.mat4_mult(mv,mrot);
+            mv = S3d.mat4_mult(mv,mrot2);
+            var pos = S3d.vec4_mult([0,0,0,1],mv);
+            lights.push([pos,[1,1,1,1],120]);
+            //draw_sprite(images[9],pos,0.5,0.5);
         }
 
         for (var l=0;l<outline.length;l++) {
@@ -378,6 +388,8 @@ Canvas
                     ocolor[0] = base[0] * root.ambient;
                     ocolor[1] = base[1] * root.ambient;
                     ocolor[2] = base[2] * root.ambient;
+
+                    ocolor = S3d.color4_clamp(ocolor);
 
                     for (var l=0;l<lights.length;l++) {
                         var lpos = lights[l][0];
