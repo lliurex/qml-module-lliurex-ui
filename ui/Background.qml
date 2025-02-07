@@ -284,6 +284,8 @@ Canvas
         }
 
         var cube = S3d.create_box(1,2);
+        var semi = S3d.semicylinder(1,5);
+
         var mrot = S3d.mat4_create_rot_y(Math.PI/4 + angle);
         var mrot2 = S3d.mat4_create_rot_x(-0.7);
 
@@ -360,82 +362,83 @@ Canvas
             mv = S3d.mat4_mult(mv,mrot);
             mv = S3d.mat4_mult(mv,mrot2);
 
+            var mesh = cube;
 
             if (color === S3d.KEYCODE_MICE) {
-                //var pos = S3d.vec4_mult([0.5,0.1,-2.5,1],mv);
-                //console.log("sprite pos ",pos);
-                //draw_sprite("02.png",pos,1.5,3);
-            }
-            else {
-
-                for (var n=0;n<cube.length;n+=3) {
-                    var va = S3d.vec4_mult(cube[n],mv);
-                    var vb = S3d.vec4_mult(cube[n+1],mv);
-                    var vc = S3d.vec4_mult(cube[n+2],mv);
-
-                    var vab = S3d.vec4_sub(vb,va);
-                    vab = S3d.vec4_normalize(vab);
-
-                    var vac = S3d.vec4_sub(vc,va);
-                    vac = S3d.vec4_normalize(vac);
-
-                    var normal = S3d.vec4_cross(vab,vac);
-
-                    var base = S3d.color4_create(S3d.COLOR_BASE);
-
-                    var ocolor = [0,0,0,1];
-
-                    ocolor[0] = base[0] * root.ambient;
-                    ocolor[1] = base[1] * root.ambient;
-                    ocolor[2] = base[2] * root.ambient;
-
-                    ocolor = S3d.color4_clamp(ocolor);
-
-                    for (var l=0;l<lights.length;l++) {
-                        var lpos = lights[l][0];
-                        var lcolor = lights[l][1];
-                        var lenergy = lights[l][2];
-
-                        var val = S3d.vec4_sub(lpos,va);
-                        val = S3d.vec4_normalize(val);
-                        val[3] = 0;
-                        var e = [0,0,0,0];
-                        var cosAlpha = S3d.vec4_dot(normal,val);
-
-                        var val = S3d.vec4_sub(va,lpos);
-                        var ldist = S3d.vec4_dist(val);
-
-                        var attenuation = lenergy/(1 + (1*ldist) + (1*ldist*ldist));
-
-                        if (cosAlpha>0) {
-                            e[0] = base[0] * cosAlpha * attenuation;
-                            e[1] = base[1] * cosAlpha * attenuation;
-                            e[2] = base[2] * cosAlpha * attenuation;
-
-                            ocolor = S3d.color4_add(ocolor,e);
-
-                        }
-
-                    }
-
-                    const light = S3d.vec4_normalize([1,0,-1,0]);
-                    const cam = S3d.vec4_normalize([0,0,-1,0]);
-
-                    var cosAlpha = S3d.vec4_dot(normal,cam);
-
-                    if (cosAlpha<0) {
-                        continue;
-                    }
-
-                    cosAlpha = S3d.vec4_dot(normal,light);
-
-                    var fade = (scene[s][0][1]+(cube[n][1]/2))/(bbox[1][1]-1);
-
-                    ocolor = S3d.color4_blend(ocolor,background,1-fade);
-                    ocolor = Qt.rgba(ocolor[0],ocolor[1],ocolor[2],1);
-                    draw_triangle(va,vb,vc,ocolor);
+                if (root.isWallpaper) {
+                    continue
                 }
+                mesh = semi;
             }
+
+            for (var n=0;n<mesh.length;n+=3) {
+                var va = S3d.vec4_mult(mesh[n],mv);
+                var vb = S3d.vec4_mult(mesh[n+1],mv);
+                var vc = S3d.vec4_mult(mesh[n+2],mv);
+
+                var vab = S3d.vec4_sub(vb,va);
+                vab = S3d.vec4_normalize(vab);
+
+                var vac = S3d.vec4_sub(vc,va);
+                vac = S3d.vec4_normalize(vac);
+
+                var normal = S3d.vec4_cross(vab,vac);
+
+                var base = S3d.color4_create(S3d.COLOR_BASE);
+
+                var ocolor = [0,0,0,1];
+
+                ocolor[0] = base[0] * root.ambient;
+                ocolor[1] = base[1] * root.ambient;
+                ocolor[2] = base[2] * root.ambient;
+
+                ocolor = S3d.color4_clamp(ocolor);
+
+                for (var l=0;l<lights.length;l++) {
+                    var lpos = lights[l][0];
+                    var lcolor = lights[l][1];
+                    var lenergy = lights[l][2];
+
+                    var val = S3d.vec4_sub(lpos,va);
+                    val = S3d.vec4_normalize(val);
+                    val[3] = 0;
+                    var e = [0,0,0,0];
+                    var cosAlpha = S3d.vec4_dot(normal,val);
+
+                    var val = S3d.vec4_sub(va,lpos);
+                    var ldist = S3d.vec4_dist(val);
+
+                    var attenuation = lenergy/(1 + (1*ldist) + (1*ldist*ldist));
+
+                    if (cosAlpha>0) {
+                        e[0] = base[0] * cosAlpha * attenuation;
+                        e[1] = base[1] * cosAlpha * attenuation;
+                        e[2] = base[2] * cosAlpha * attenuation;
+
+                        ocolor = S3d.color4_add(ocolor,e);
+
+                    }
+
+                }
+
+                const light = S3d.vec4_normalize([1,0,-1,0]);
+                const cam = S3d.vec4_normalize([0,0,-1,0]);
+
+                var cosAlpha = S3d.vec4_dot(normal,cam);
+
+                if (cosAlpha<0) {
+                    continue;
+                }
+
+                cosAlpha = S3d.vec4_dot(normal,light);
+
+                var fade = (scene[s][0][1]+(cube[n][1]/2))/(bbox[1][1]-1);
+
+                ocolor = S3d.color4_blend(ocolor,background,1-fade);
+                ocolor = Qt.rgba(ocolor[0],ocolor[1],ocolor[2],1);
+                draw_triangle(va,vb,vc,ocolor);
+            }
+
         }
 
         flush(ctx);
