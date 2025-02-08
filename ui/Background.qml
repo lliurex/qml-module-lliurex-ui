@@ -62,7 +62,10 @@ Canvas
         6 : "/usr/share/qml-module-lliurex-ui/media/06.png",
         7 : "/usr/share/qml-module-lliurex-ui/media/07.png",
         8 : "/usr/share/qml-module-lliurex-ui/media/08.png",
-        9 : "/usr/share/qml-module-lliurex-ui/media/09.png"
+        9 : "/usr/share/qml-module-lliurex-ui/media/09.png",
+        10: "/usr/share/qml-module-lliurex-ui/media/a00.png",
+        11: "/usr/share/qml-module-lliurex-ui/media/c00.png",
+        12: "/usr/share/qml-module-lliurex-ui/media/v00.png"
     }
 
     /* Drawing functions */
@@ -238,9 +241,9 @@ Canvas
 
         places = places.sort( () => Math.random() - 0.5 );
 
-        characters.push([images[2],places[0]]);
-        characters.push([images[4],places[1]]);
-        characters.push([images[7],places[2]]);
+        characters.push([images[10],places[0]]);
+        characters.push([images[11],places[1]]);
+        characters.push([images[12],places[2]]);
 
     }
 
@@ -284,7 +287,7 @@ Canvas
         }
 
         var cube = S3d.create_box(1,2);
-        var semi = S3d.semicylinder(1,5);
+        var semi = S3d.semicylinder(1,6);
 
         var mrot = S3d.mat4_create_rot_y(Math.PI/4 + angle);
         var mrot2 = S3d.mat4_create_rot_x(-0.7);
@@ -357,19 +360,44 @@ Canvas
 
             var color = scene[s][1];
 
-            var mv = S3d.mat4_create_translate(tx,ty,tz);
-
-            mv = S3d.mat4_mult(mv,mrot);
-            mv = S3d.mat4_mult(mv,mrot2);
+            var mv = S3d.mat4_create_identity();
 
             var mesh = cube;
 
             if (color === S3d.KEYCODE_MICE) {
-                if (root.isWallpaper) {
-                    continue
-                }
+                continue
+            }
+
+            if (color === S3d.KEYCODE_TOTEM ) {
+                continue;
+            }
+
+            if (color === S3d.KEYCODE_EDGE_N ) {
                 mesh = semi;
             }
+
+            if (color === S3d.KEYCODE_EDGE_E ) {
+                mesh = semi;
+                var m = S3d.mat4_create_rot_y((Math.PI/2) * 1);
+                mv = S3d.mat4_mult(mv,m);
+            }
+
+            if (color === S3d.KEYCODE_EDGE_S ) {
+                mesh = semi;
+                var m = S3d.mat4_create_rot_y((Math.PI/2) * 2);
+                mv = S3d.mat4_mult(mv,m);
+            }
+
+            if (color === S3d.KEYCODE_EDGE_W ) {
+                mesh = semi;
+                var m = S3d.mat4_create_rot_y((Math.PI/2) * 3);
+                mv = S3d.mat4_mult(mv,m);
+            }
+
+            var mt = S3d.mat4_create_translate(tx,ty,tz);
+            mv = S3d.mat4_mult(mv,mt);
+            mv = S3d.mat4_mult(mv,mrot);
+            mv = S3d.mat4_mult(mv,mrot2);
 
             for (var n=0;n<mesh.length;n+=3) {
                 var va = S3d.vec4_mult(mesh[n],mv);

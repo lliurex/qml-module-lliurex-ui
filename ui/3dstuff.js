@@ -17,7 +17,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+const KEYCODE_BLOCK = "#5b6ee1";
 const KEYCODE_MICE = "#d95763";
+const KEYCODE_TOTEM = "#fbf236";
+const KEYCODE_EDGE_S = "#5fcde4";
+const KEYCODE_EDGE_E = "#639bff";
+const KEYCODE_EDGE_N = "#cbdbfc";
+const KEYCODE_EDGE_W = "#ffffff";
 
 const COLOR_BACKGROUND = [0x34,0x49,0x5e,0xff];
 const COLOR_BASE = [0x28,0x80,0xb9,0xff];
@@ -160,7 +166,7 @@ function mat4_mult(a,b)
     return m;
 }
 
-        function vec4_mult(v,m)
+function vec4_mult(v,m)
 {
     var r = [0,0,0,0];
 
@@ -350,18 +356,38 @@ function semicylinder(w,steps)
     var rad_step = Math.PI / steps;
 
     for (var n=0;n<steps;n++) {
+        var ax = 0;
+        var ay = 0;
+
         var bx = Math.cos(rad_step * n) * w;
         var by = Math.sin(rad_step * n) * w;
         var cx = Math.cos(rad_step * (n + 1)) * w;
         var cy = Math.sin(rad_step * (n + 1)) * w;
 
-        triangles.push([0,w,0,1]);
+        ay = ay - w;
+        by = by - w;
+        cy = cy - w;
+
+        // top
+        triangles.push([ax,w,ay,1]);
         triangles.push([cx,w,cy,1]);
         triangles.push([bx,w,by,1]);
 
-        triangles.push([0,-w,0,1]);
+        // bottom
+        triangles.push([ax,-w,ay,1]);
         triangles.push([bx,-w,by,1]);
         triangles.push([cx,-w,cy,1]);
+
+        //front
+        triangles.push([bx,w,by,1]);
+        triangles.push([cx,w,cy,1]);
+        triangles.push([cx,-w,cy,1]);
+
+        triangles.push([cx,-w,cy,1]);
+        triangles.push([bx,-w,by,1]);
+        triangles.push([bx,w,by,1]);
+
+
     }
 
     return triangles;
