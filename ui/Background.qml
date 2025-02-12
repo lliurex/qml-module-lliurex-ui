@@ -30,7 +30,7 @@ Canvas
     anchors.fill: parent
     antialiasing:false; smooth:false
 
-    property var isWallpaper: false
+    property var isWallpaper: true
     property var rats: true
     property var baseColor: "#2980b9"
     property var seed : 0
