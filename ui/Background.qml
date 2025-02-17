@@ -54,18 +54,36 @@ Canvas
 
 
     property var images : {
-        1 : "/usr/share/qml-module-lliurex-ui/media/01.png",
-        2 : "/usr/share/qml-module-lliurex-ui/media/02.png",
-        3 : "/usr/share/qml-module-lliurex-ui/media/03.png",
-        4 : "/usr/share/qml-module-lliurex-ui/media/04.png",
-        5 : "/usr/share/qml-module-lliurex-ui/media/05.png",
-        6 : "/usr/share/qml-module-lliurex-ui/media/06.png",
-        7 : "/usr/share/qml-module-lliurex-ui/media/07.png",
-        8 : "/usr/share/qml-module-lliurex-ui/media/08.png",
-        9 : "/usr/share/qml-module-lliurex-ui/media/09.png",
-        10: "/usr/share/qml-module-lliurex-ui/media/a00.png",
-        11: "/usr/share/qml-module-lliurex-ui/media/c00.png",
-        12: "/usr/share/qml-module-lliurex-ui/media/v00.png"
+
+        1: "/usr/share/qml-module-lliurex-ui/media/a01.png",
+        2: "/usr/share/qml-module-lliurex-ui/media/a03.png",
+        3: "/usr/share/qml-module-lliurex-ui/media/a04.png",
+        4: "/usr/share/qml-module-lliurex-ui/media/a05.png",
+
+        5: "/usr/share/qml-module-lliurex-ui/media/c01.png",
+        6: "/usr/share/qml-module-lliurex-ui/media/c03.png",
+        7: "/usr/share/qml-module-lliurex-ui/media/c04.png",
+        8: "/usr/share/qml-module-lliurex-ui/media/c05.png",
+
+        9: "/usr/share/qml-module-lliurex-ui/media/v01.png",
+        10: "/usr/share/qml-module-lliurex-ui/media/v03.png",
+        11: "/usr/share/qml-module-lliurex-ui/media/v04.png",
+        12: "/usr/share/qml-module-lliurex-ui/media/v05.png",
+
+        13: "/usr/share/qml-module-lliurex-ui/media/totem.png",
+        14: "/usr/share/qml-module-lliurex-ui/media/a02.png",
+        15: "/usr/share/qml-module-lliurex-ui/media/c02.png",
+        16: "/usr/share/qml-module-lliurex-ui/media/v02.png",
+
+        17: "/usr/share/qml-module-lliurex-ui/media/f00.png",
+        18: "/usr/share/qml-module-lliurex-ui/media/f01.png",
+    }
+
+    function rand_int(start,end) {
+        var range = end - start;
+        var value =  Math.floor(Math.random() * range);
+
+        return start + value;
     }
 
     /* Drawing functions */
@@ -241,9 +259,9 @@ Canvas
 
         places = places.sort( () => Math.random() - 0.5 );
 
-        characters.push([images[10],places[0]]);
-        characters.push([images[11],places[1]]);
-        characters.push([images[12],places[2]]);
+        characters.push([images[rand_int(1,4)],places[0]]);
+        characters.push([images[rand_int(5,8)],places[1]]);
+        characters.push([images[rand_int(9,12)],places[2]]);
 
     }
 
@@ -287,7 +305,7 @@ Canvas
         }
 
         var cube = S3d.create_box(1,2);
-        var semi = S3d.semicylinder(1,6);
+        var semi = S3d.semicylinder(1,6,2);
 
         var mrot = S3d.mat4_create_rot_y(Math.PI/4 + angle);
         var mrot2 = S3d.mat4_create_rot_x(-0.7);
@@ -304,7 +322,7 @@ Canvas
                 var pos = S3d.vec4_mult([0.5,0,0.5,1],mv);
                 lights.push([pos,[1,1,1,1],40]);
 
-                draw_sprite(images[9],pos,0.5,0.5);
+                draw_sprite(images[rand_int(17,18)],pos,0.5,0.5);
             }
 
             for (var c=0;c<characters.length;c++) {

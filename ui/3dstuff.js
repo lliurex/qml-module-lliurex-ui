@@ -350,12 +350,12 @@ function center(bbox)
     return [x,y,z];
 }
 
-function semicylinder(w,steps)
+function semicylinder(w,hsteps,vsteps)
 {
     var triangles = [];
-    var rad_step = Math.PI / steps;
+    var rad_step = Math.PI / hsteps;
 
-    for (var n=0;n<steps;n++) {
+    for (var n=0;n<hsteps;n++) {
         var ax = 0;
         var ay = 0;
 
@@ -379,14 +379,21 @@ function semicylinder(w,steps)
         triangles.push([cx,-w,cy,1]);
 
         //front
-        triangles.push([bx,w,by,1]);
-        triangles.push([cx,w,cy,1]);
-        triangles.push([cx,-w,cy,1]);
 
-        triangles.push([cx,-w,cy,1]);
-        triangles.push([bx,-w,by,1]);
-        triangles.push([bx,w,by,1]);
+        var vslice = (w * 2) / vsteps;
 
+        for (var i=0;i<vsteps;i++) {
+            var iw = -w + (i * vslice);
+            var jw = iw + vslice;
+
+            triangles.push([bx,jw,by,1]);
+            triangles.push([cx,jw,cy,1]);
+            triangles.push([cx,iw,cy,1]);
+
+            triangles.push([cx,iw,cy,1]);
+            triangles.push([bx,iw,by,1]);
+            triangles.push([bx,jw,by,1]);
+        }
 
     }
 
