@@ -80,7 +80,7 @@ Canvas
     }
 
     function rand_int(start,end) {
-        var range = end - start;
+        var range = (end + 1 ) - start;
         var value =  Math.floor(Math.random() * range);
 
         return start + value;
@@ -321,8 +321,8 @@ Canvas
 
                 var pos = S3d.vec4_mult([0.5,0,0.5,1],mv);
                 lights.push([pos,[1,1,1,1],40]);
-
-                draw_sprite(images[rand_int(17,18)],pos,0.5,0.5);
+                var ffsprite = (Math.random() > 0.5 ) ? 17 : 18;
+                draw_sprite(images[ffsprite],pos,0.5,0.5);
             }
 
             for (var c=0;c<characters.length;c++) {
@@ -336,7 +336,7 @@ Canvas
                 mv = S3d.mat4_mult(mv,mrot);
                 mv = S3d.mat4_mult(mv,mrot2);
 
-                var pos = S3d.vec4_mult([0.5,0.1,-2.5,1],mv);
+                var pos = S3d.vec4_mult([0.0,0.1,-2.5,1],mv);
 
                 draw_sprite(img,pos,1.5,3);
             }
