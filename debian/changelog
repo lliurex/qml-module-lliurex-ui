@@ -1,3 +1,10 @@
+qml-module-lliurex-ui (25.1.0.0~beta1) noble; urgency=medium
+
+  * Higher resolution characters
+  * Chracters are no longer scaled up or down
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 25 Feb 2025 09:22:24 +0100
+
 qml-module-lliurex-ui (25.1.0.0~beta0) noble; urgency=medium
 
   * Updated wallpaper, but still wip
