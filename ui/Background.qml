@@ -177,7 +177,8 @@ Canvas
             var w = ww*sw;
             var h = ww*sh;
             //console.log(w,h);
-            ctx.drawImage(img,win[0],win[1]-h,w,h);
+            //ctx.drawImage(img,win[0],win[1]-h,w,h);
+            ctx.drawImage(img,win[0]-(sw/2),win[1]-sh,sw,sh);
 
         }
 
@@ -319,10 +320,11 @@ Canvas
                 mv = S3d.mat4_mult(mv,mrot);
                 mv = S3d.mat4_mult(mv,mrot2);
 
-                var pos = S3d.vec4_mult([0.5,0,0.5,1],mv);
+                var pos = S3d.vec4_mult([1.0,0,-1.0,1],mv);
                 lights.push([pos,[1,1,1,1],40]);
                 var ffsprite = (Math.random() > 0.5 ) ? 17 : 18;
-                draw_sprite(images[ffsprite],pos,0.5,0.5);
+                //draw_sprite(images[ffsprite],pos,0.5,0.5);
+                draw_sprite(images[ffsprite],pos,32,32);
             }
 
             for (var c=0;c<characters.length;c++) {
@@ -336,9 +338,10 @@ Canvas
                 mv = S3d.mat4_mult(mv,mrot);
                 mv = S3d.mat4_mult(mv,mrot2);
 
-                var pos = S3d.vec4_mult([0.0,0.1,-2.5,1],mv);
+                var pos = S3d.vec4_mult([1.0,0.1,-1.0,1],mv);
 
-                draw_sprite(img,pos,1.5,3);
+                //draw_sprite(img,pos,1.5,3);
+                draw_sprite(img,pos,128,256);
             }
         }
         else {
