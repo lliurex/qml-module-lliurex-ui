@@ -32,6 +32,7 @@ Canvas
 
     property var isWallpaper: true
     property var rats: true
+    property var totem: false
     property var baseColor: "#2980b9"
     property var seed : 0
     property var ambient: (isWallpaper) ? 0.2 : 0.4
@@ -178,6 +179,12 @@ Canvas
             var h = ww*sh;
             //console.log(w,h);
             //ctx.drawImage(img,win[0],win[1]-h,w,h);
+
+            // hack
+            if (img == images[13]) {
+                win[1]+=32;
+            }
+
             ctx.drawImage(img,win[0]-(sw/2),win[1]-sh,sw,sh);
 
         }
@@ -227,6 +234,10 @@ Canvas
             loadImage(images[n]);
         }
 
+        if (isWallpaper && rats) {
+            totem = (Math.random() > 0.9);
+        }
+
         bbox = S3d.box(scene);
         cbox = S3d.center(bbox);
 
@@ -251,19 +262,32 @@ Canvas
 
             var color = scene[s][1];
 
-            if (color == S3d.KEYCODE_MICE) {
-                places.push([tx,ty,tz]);
+            if (totem) {
+                if (color == S3d.KEYCODE_TOTEM) {
+                    places.push([tx,ty,tz]);
+                }
+            }
+            else {
+                if (color == S3d.KEYCODE_MICE) {
+                    places.push([tx,ty,tz]);
+                }
             }
 
         }
 
-
         places = places.sort( () => Math.random() - 0.5 );
 
-        characters.push([images[rand_int(1,4)],places[0]]);
-        characters.push([images[rand_int(5,8)],places[1]]);
-        characters.push([images[rand_int(9,12)],places[2]]);
-
+        if (totem) {
+            characters.push([images[13],places[0]]);
+            characters.push([images[14],places[1]]);
+            characters.push([images[15],places[2]]);
+            characters.push([images[16],places[3]]);
+        }
+        else {
+            characters.push([images[rand_int(1,4)],places[0]]);
+            characters.push([images[rand_int(5,8)],places[1]]);
+            characters.push([images[rand_int(9,12)],places[2]]);
+        }
     }
 
     function computeRatio()
@@ -339,6 +363,10 @@ Canvas
                 mv = S3d.mat4_mult(mv,mrot2);
 
                 var pos = S3d.vec4_mult([1.0,0.1,-1.0,1],mv);
+
+                if (img == images[13]) {
+                    lights.push([pos,[1,1,1,1],200]);
+                }
 
                 //draw_sprite(img,pos,1.5,3);
                 draw_sprite(img,pos,128,256);
