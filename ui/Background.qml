@@ -244,8 +244,8 @@ Canvas
         var xwide = bbox[1][0] - bbox[0][0];
         var zwide = bbox[1][2] - bbox[0][2];
 
-        var spread = 6;
-        for (var n=0;n<4;n++) {
+        var spread = 5;
+        for (var n=0;n<8;n++) {
             var x = cbox[0] + (Math.random() * spread*2) - spread;
             var y = 2; //bbox[1][1] - 0;
             var z = cbox[2] + (Math.random() * spread*2) - spread;
@@ -305,6 +305,11 @@ Canvas
         computeRatio();
     }
 
+    onImageLoaded:
+    {
+        requestPaint();
+    }
+
     onPaint: function()
     {
         var ctx = getContext("2d");
@@ -351,25 +356,27 @@ Canvas
                 draw_sprite(images[ffsprite],pos,32,32);
             }
 
-            for (var c=0;c<characters.length;c++) {
-                var img = characters[c][0];
-                var tx = characters[c][1][0];
-                var ty = characters[c][1][1];
-                var tz = characters[c][1][2];
+            if (rats) {}
+                for (var c=0;c<characters.length;c++) {
+                    var img = characters[c][0];
+                    var tx = characters[c][1][0];
+                    var ty = characters[c][1][1];
+                    var tz = characters[c][1][2];
 
-                var mv = S3d.mat4_create_translate(tx,ty,tz);
+                    var mv = S3d.mat4_create_translate(tx,ty,tz);
 
-                mv = S3d.mat4_mult(mv,mrot);
-                mv = S3d.mat4_mult(mv,mrot2);
+                    mv = S3d.mat4_mult(mv,mrot);
+                    mv = S3d.mat4_mult(mv,mrot2);
 
-                var pos = S3d.vec4_mult([1.0,0.1,-1.0,1],mv);
+                    var pos = S3d.vec4_mult([1.0,0.1,-1.0,1],mv);
 
-                if (img == images[13]) {
-                    lights.push([pos,[1,1,1,1],200]);
+                    if (img == images[13]) {
+                        lights.push([pos,[1,1,1,1],200]);
+                    }
+
+                    //draw_sprite(img,pos,1.5,3);
+                    draw_sprite(img,pos,128,256);
                 }
-
-                //draw_sprite(img,pos,1.5,3);
-                draw_sprite(img,pos,128,256);
             }
         }
         else {
