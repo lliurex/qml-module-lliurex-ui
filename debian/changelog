@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (25.1.0.0) noble; urgency=medium
+
+  * Repaint background on deferred image load
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Mon, 17 Mar 2025 23:00:29 +0100
+
 qml-module-lliurex-ui (25.1.0.0~beta2) noble; urgency=medium
 
   * Fixed some bad sized images
