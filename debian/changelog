@@ -1,3 +1,9 @@
+qml-module-lliurex-ui (25.1.1.0) noble; urgency=medium
+
+  * Fixed bracket typo
+
+ -- Enrique Medina Gremaldos <quique@necos.es>  Tue, 18 Mar 2025 14:26:05 +0100
+
 qml-module-lliurex-ui (25.1.0.0) noble; urgency=medium
 
   * Repaint background on deferred image load
