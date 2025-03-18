@@ -356,7 +356,7 @@ Canvas
                 draw_sprite(images[ffsprite],pos,32,32);
             }
 
-            if (rats) {}
+            if (rats) {
                 for (var c=0;c<characters.length;c++) {
                     var img = characters[c][0];
                     var tx = characters[c][1][0];
