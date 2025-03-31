@@ -324,7 +324,10 @@ Canvas
             var cx = width/2;
             var cy = height/2;
             var grd = ctx.createRadialGradient(cx,cy, r0, cx,cy, r1);
-            grd.addColorStop(0, S3d.color4_create_hex(S3d.COLOR_BASE));
+            var tcolor = S3d.color4_mult(S3d.color4_create(S3d.COLOR_BASE),1+root.ambient);
+            console.log(S3d.color4_to_bytes(tcolor));
+            console.log(S3d.color4_create_hex(S3d.color4_to_bytes(tcolor)));
+            grd.addColorStop(0, S3d.color4_create_hex(S3d.color4_to_bytes(tcolor)));
             grd.addColorStop(1, "#ff000000");
             ctx.fillStyle = grd;
             ctx.fillRect(0,0,width,height);
@@ -350,7 +353,7 @@ Canvas
                 mv = S3d.mat4_mult(mv,mrot2);
 
                 var pos = S3d.vec4_mult([1.0,0,-1.0,1],mv);
-                lights.push([pos,[1,1,1,1],40]);
+                lights.push([pos,[1,1,1,1],25]);
                 var ffsprite = (Math.random() > 0.5 ) ? 17 : 18;
                 //draw_sprite(images[ffsprite],pos,0.5,0.5);
                 draw_sprite(images[ffsprite],pos,32,32);
