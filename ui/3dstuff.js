@@ -62,6 +62,18 @@ function color4_from_bytes(r,g,b,a)
     return c;
 }
 
+function color4_to_bytes(a)
+{
+    var c = [0,0,0,0];
+
+    c[0] = Math.floor(a[0] * 255);
+    c[1] = Math.floor(a[1] * 255);
+    c[2] = Math.floor(a[2] * 255);
+    c[3] = Math.floor(a[3] * 255);
+
+    return c;
+}
+
 function color4_clamp(a)
 {
     var c = [0,0,0,0];
@@ -98,6 +110,18 @@ function color4_add(a,b)
     c[1] = a[1] + b[1];
     c[2] = a[2] + b[2];
     c[3] = a[3] + b[3];
+
+    return color4_clamp(c);
+}
+
+function color4_mult(a,factor)
+{
+    var c = [0,0,0,0];
+
+    c[0] = a[0] * factor;
+    c[1] = a[1] * factor;
+    c[2] = a[2] * factor;
+    c[3] = a[3] * factor;
 
     return color4_clamp(c);
 }
